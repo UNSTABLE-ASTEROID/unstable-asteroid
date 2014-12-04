@@ -1,5 +1,5 @@
 //Tree is empty object
-treeData = [];
+var treeData = [];
 
 function setTreeData(data){
   treeData = data ? data : treeData;
@@ -16,8 +16,6 @@ $(document).ready(function(){
 
   //Add bubble
   $('.btn.send').on('click', function(){
-    console.log('hello')
-  $('button').on('click', function(){
     var message = $('input').val();
     var messageObject = {};
     if(nodeSelected){

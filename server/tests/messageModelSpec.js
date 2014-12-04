@@ -29,5 +29,18 @@ describe('MessageModel Test', function() {
       done();
     });
   });
+        should.not.exist(err);
+        message.should.have.property('message','Test');
+        done();
+      });
+    });
+  });
+
+  it('should retrive single message from database', function (done) {
+    Message.find({}, function (err, messages) {
+      messages[0].should.have.property('message', 'Test');
+      done();
+    });
+  });
 });
 
