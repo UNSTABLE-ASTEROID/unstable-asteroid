@@ -4,8 +4,7 @@ var messageController = require('../messages/messageController'),
     Message = require('../messages/messageModel'),
     expect = require('chai').expect,
     mongoose = require('mongoose'),
-    Q = require('q'),
-    stubs = require('./stubs');
+    Q = require('q');
 
 mongoose.connect('mongodb://127.0.0.1/test');
 
@@ -17,43 +16,70 @@ describe('MessageController Test', function() {
 
   });
 
-  it('should add message to server', function(done) {
+  it('should add message to array', function(done) {
 
     var test = {
-      message: "Test",
-      parentID: 234,
-      childrenID: 354
+        message: "Test",
+        parentID: null
     };
 
-    var req = new stubs.request('', 'POST', test);
-    var res = new stubs.response();
+    messageController.addNewMessage(test, function(createdMessage) {
 
-    var testMessage = new Message(test);
-    var addMessage = Q.nbind(messageController.addNewMessage, Message);
+      Message.find({}, function(err, foundMessages) {
 
-    addMessage(req, res)
-    .then(function() {
-      expect(res._data).to.eql(testMessage);
-      done();
-    });
+        expect(foundMessages[0].message).to.eql("Test");
+        done();
+
+      });
+
+    })
 
   });
 
   it('should get array of messages from server', function(done) {
 
-    var req = new stubs.request('', 'POST', test);
-    var res = new stubs.response();
-
-    var test = {
-      message: "Test",
-      parentID: 234,
-      childrenID: [354]
+    var test1 = {
+      message: 'Test1',
+      parentID: null
     };
 
-    Message.create(test, function(err) {
-      Message.create(test, function(err) {
-        messageController.getFullMessageTree(req, res);
-      });
+    messageController.addNewMessage(test1, function(createdMessage1) {
+
+      var test2 = {
+        message: 'Test2',
+        parentID: createdMessage1._id
+      };
+
+      var test3 = {
+        message: 'Test3',
+        parentID: createdMessage1._id
+      };
+
+      messageController.addNewMessage(test2, function(createdMessage2) {
+
+        messageController.addNewMessage(test3, function(createdMessage3) {
+
+          var test4 = {
+            message: 'Test4',
+            parentID: createdMessage2._id
+          };
+
+          messageController.addNewMessage(test4, function(createdMessage4) {
+
+            var messageTree = messageController.getFullMessageTree();
+
+            console.log(messageTree);
+            expect(messageTree).to.eql(messageTree);
+            done();
+
+          });
+
+        });
+
+
+      })
+
+
     });
 
 

@@ -17,8 +17,7 @@ module.exports = {
 
     getMessageTree({})
       .then(function (messages) {
-
-        return constructTree(messages);
+        return module.exports.constructTree(messages);
       })
       .fail(function (error) {
         next(error);
@@ -27,15 +26,16 @@ module.exports = {
 
   //adds message to db
   ////@params [Object (message, parentID)]
-  addNewMessage: function (messageObject) {
+  addNewMessage: function (messageObject, callback) {
 
     var newMessage = {
 
-      message: messageObject.messsage,
-      parentID: messagObject.parentID
+      message: messageObject.message,
+      parentID: messageObject.parentID,
       childrenID: []
 
     };
+
     var createMessage = Q.nbind(Message.create, Message);
 
     createMessage(newMessage)
@@ -44,8 +44,17 @@ module.exports = {
       //finds parent and appends new messageID to childrenID array
       Message.findOne({_id: createdMessage.parentID }, function(err, foundParent) {
 
-        foundParent.childrenID.push(createdMessage._id);
-        foundParent.save();
+        if (foundParent) {
+
+          foundParent.childrenID.push(createdMessage._id);
+          foundParent.save();
+
+        }
+
+        // for testing purposes
+        // if (callback) {
+        //   callback(createdMessage);
+        // }
 
       })
 
@@ -53,11 +62,12 @@ module.exports = {
 
   },
 
+  //creates array of messages + direct children
   constructTree: function(arrayOfMessages) {
 
     var messages = [];
 
-    //pushes roots to array
+    // pushes roots to array
     arrayOfMessages.forEach(function(message) {
 
       message.children = []
@@ -67,10 +77,8 @@ module.exports = {
         //checks entire message array for matching childID
         arrayOfMessages.forEach(function(messageToCompare) {
 
-          if (messageToCompare._id === childID) {
-
+          if (messageToCompare._id.equals(childID)) {
             message.children.push(messageToCompare);
-
           }
 
         });
