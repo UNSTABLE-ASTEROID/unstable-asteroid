@@ -15,14 +15,6 @@ describe('MessageController Test', function() {
 
     Message.remove(done);
 
-
-    var res = {};
-
-    res.json = function(test) {
-      console.log('test');
-      console.log(test);
-    };
-
   });
 
   it('should add message to server', function(done) {

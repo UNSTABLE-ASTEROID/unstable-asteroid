@@ -7,8 +7,8 @@ var mongoose = require('mongoose');
 var MessageSchema = new mongoose.Schema({
 
   message: String,
-  parentID: Number,
-  childrenID: [Number]
+  parentID: ObjectID,
+  childrenID: [ObjectID]
 
 });
 
