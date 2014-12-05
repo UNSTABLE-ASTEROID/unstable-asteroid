@@ -36,7 +36,6 @@ var link = svg.selectAll(".link"),
 //             "name": "Other Daughter of A",
 //             "parent": "Level 2: A"
 //           },
-
 //         ]
 //       },
 //       {

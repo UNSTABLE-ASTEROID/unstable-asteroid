@@ -17,6 +17,7 @@ $(document).ready(function(){
   //Add bubble
   $('.btn.send').on('click', function(){
     console.log('hello')
+  $('button').on('click', function(){
     var message = $('input').val();
     var messageObject = {};
     if(nodeSelected){
