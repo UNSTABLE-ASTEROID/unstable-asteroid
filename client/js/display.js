@@ -36,7 +36,7 @@ var link = svg.selectAll(".link"),
 //             "name": "Other Daughter of A",
 //             "parent": "Level 2: A"
 //           },
-           
+
 //         ]
 //       },
 //       {
@@ -56,10 +56,13 @@ var link = svg.selectAll(".link"),
 
 function update() {
   var nodes = flatten(treeData);
-  //console.log(treeData);
+  console.log('tree', treeData);
+  console.log('nodes', nodes);
+  //nodes = treeData;
   var links = d3.layout.tree().links(nodes);
 
   // Restart the force layout.
+
   force
       .nodes(nodes)
       .links(links)
@@ -107,7 +110,7 @@ function update() {
     .attr("class", "label")
     .attr("dx", 0)
     .attr("dy", ".35em")
-    .text(function(d){return d.message});    
+    .text(function(d){return d.message});
 
   node.attr("class", function(d){
     if(d === nodeSelected) {

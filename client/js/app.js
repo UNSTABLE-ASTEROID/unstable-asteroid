@@ -8,7 +8,7 @@ function setTreeData(data){
 
 $(document).ready(function(){
 
-  //Make connection 
+  //Make connection
   var socket = new Socket();
 
   //Set listener
@@ -23,10 +23,10 @@ $(document).ready(function(){
       // if(!nodeSelected.children){
       //   nodeSelected.children = [];
       // }
-      messageObject = {message: message, parentID: nodeSelected.id};
+      messageObject = {message: message, parentID: nodeSelected._id};
       // nodeSelected.children.push({name: message, parent: nodeSelected.id});
     }else{
-      messageObject = {message: message, parentID: 'null'};
+      messageObject = {message: message, parentID: null};
       // treeData.push(messageObject);
     }
     socket.sendMessage(messageObject);

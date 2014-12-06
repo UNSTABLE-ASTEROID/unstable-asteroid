@@ -6,7 +6,8 @@ var messageController = require('../messages/messageController'),
     mongoose = require('mongoose'),
     Q = require('q');
 
-mongoose.connect('mongodb://127.0.0.1/test');
+mongoose.connect('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTNs5G7nyd1cbE-@ds050077.mongolab.com:50077/MongoLab-d');
+// mongoose.connect('mongodb://127.0.0.1/test');
 
 describe('MessageController Test', function() {
 
@@ -14,7 +15,11 @@ describe('MessageController Test', function() {
     Message.remove(done);
   });
 
-  it('should add message to array', function(done) {
+  // afterEach(function(done) {
+  //   Message.remove(done);
+  // });
+
+  xit('should add message to array', function(done) {
     var test = {
         message: "Test",
         parentID: null
@@ -43,7 +48,6 @@ describe('MessageController Test', function() {
         message: 'Test3',
         parentID: createdMessage1._id
       };
-
       messageController.addNewMessage(test2, function(createdMessage2) {
         messageController.addNewMessage(test3, function(createdMessage3) {
           var test4 = {
@@ -52,12 +56,34 @@ describe('MessageController Test', function() {
           };
 
           messageController.addNewMessage(test4, function(createdMessage4) {
-            var messageTree = messageController.getFullMessageTree();
-            expect(messageTree).to.eql(messageTree);
-            done();
+            messageController.getFullMessageTree(function(data) {
+              expect(data).to.have.length.above(3);
+              done();
+            });
           });
         });
       });
     });
   });
+
+  xit('should clone a message', function(done) {
+    messageController.find({}, function(message) {
+      var clone = messageController.cloneMessage(message);
+      expect(clone.message).to.eql(message.message);
+      done();
+    })
+
+  });
+
+});
+
+describe('it should work', function() {
+
+  it('should return constructed tree', function(done) {
+    messageController.getFullMessageTree(function(messages) {
+      expect(messages).to.have.length(1);
+      done();
+    });
+  });
+
 });
