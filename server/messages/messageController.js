@@ -102,7 +102,7 @@ module.exports = {
 
       //if messageObject has parent then update parent
       if (!err && messageObject.parentID) {
-        module.exports(messageObject, callback);
+        module.exports.removeChildReferenceFromParent(messageObject, callback);
       } else {
         callback();
       }
